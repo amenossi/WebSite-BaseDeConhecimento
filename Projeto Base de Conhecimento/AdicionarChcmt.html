@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Conhecimento</title>
+    <link rel="stylesheet" href="formatacao.css">
+    <script>
+        function salvarConhecimento() {
+            var conhecimento = document.getElementById('txt1').value.trim();
+
+            var titulo = document.getElementById('txt2').value.trim();
+
+            if (!titulo || !conhecimento) {
+                alert('Por favor, preencha todos os campos');
+                return; 
+            }
+
+            function sanitizeHTML(str) {
+                var temp = document.createElement('div');
+                temp.textContent = str;
+                return temp.innerHTML;
+            }
+
+            var conhecimentoObj = {
+                titulo: sanitizeHTML(titulo),
+                conteudo: sanitizeHTML(conhecimento)
+            };
+
+            var timestamp = new Date().getTime();
+            var chave = 'conhecimento_' + timestamp;
+
+            localStorage.setItem(chave, JSON.stringify(conhecimentoObj));
+
+            alert('Conhecimento salvo com sucesso!');
+
+            window.location.href = 'conhecimentos.html';
+        }
+    </script>
+</head>
+<body>
+    <textarea id="txt2" placeholder="Título do Conhecimento"></textarea><br>
+    <textarea id="txt1" name="Conhecimento" placeholder="Digite seu conhecimento..." cols="30" rows="10"></textarea>
+    <div class="btncontainer">
+        <button class="button Salvar1" onclick="salvarConhecimento()">Salvar</button>
+        <button class="button Cancelar1" onclick="window.location.href='MainBC.html'">Cancelar</button>
+    </div>
+</body>
+</html>

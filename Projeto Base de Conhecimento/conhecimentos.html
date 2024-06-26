@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="formatacaomain.css">
+    <title>Base de conhecimento</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('canavial.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        .btn1, .btn2 {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            background-color: darkgray;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+        }
+
+        .btn1:hover, .btn2:hover {
+            background-color: gray;
+        }
+
+        /* Estilos para a lista de conhecimentos */
+        #lista-conhecimentos {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; 
+            height: 80vh; 
+        }
+
+        .conhecimento {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .conhecimento:hover {
+            transform: scale(1.02);
+        }
+
+        .conhecimento h3 {
+            margin: 0;
+            cursor: pointer;
+            padding: 12px 20px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            width: 100%; 
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .conhecimento h3:hover {
+            background-color: #ccc;
+        }
+
+        .conhecimento p {
+            display: none;
+            padding: 0 20px 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .conhecimento.active p {
+            display: block;
+        }
+
+        /* Media queries para ajuste responsivo */
+        @media (max-width: 768px) {
+            .conhecimento h3 {
+                padding: 12px;
+            }
+
+            .conhecimento p {
+                padding: 0 12px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="lista-conhecimentos">
+    </div>
+    <div>
+        <button class="btn1" onclick="window.location.href='MainBC.html'">Menu Principal</button>
+        <button class="btn2" onclick="window.location.href='AdicionarChcmt.html'">Adicionar mais um</button>
+    </div>
+
+    <script>
+        function carregarConhecimentos() {
+            var listaConhecimentos = document.getElementById('lista-conhecimentos');
+
+            listaConhecimentos.innerHTML = '';
+
+            function sanitizeHTML(str) {
+                var temp = document.createElement('div');
+                temp.textContent = str;
+                return temp.innerHTML;
+            }
+
+            for (var i = 0; i < localStorage.length; i++) {
+                var chave = localStorage.key(i); // Pega a chave (título do conhecimento)
+                if (chave.startsWith('conhecimento_')) { // Verifica se a chave é válida
+                    var valor = localStorage.getItem(chave); // Pega o valor (objeto JSON)
+
+                    try {
+                        var conhecimentoObj = JSON.parse(valor);
+
+                        if (conhecimentoObj && conhecimentoObj.titulo && conhecimentoObj.conteudo) {
+                            var conhecimentoElement = document.createElement('div');
+                            conhecimentoElement.classList.add('conhecimento');
+
+                            var header = document.createElement('h3');
+                            header.innerText = sanitizeHTML(conhecimentoObj.titulo);
+                            header.dataset.conteudo = sanitizeHTML(conhecimentoObj.conteudo);
+
+                            header.onclick = function () {
+                                var allConhecimentos = document.querySelectorAll('.conhecimento');
+                                allConhecimentos.forEach(function(conhecimento) {
+                                    if (conhecimento !== this.parentElement) {
+                                        conhecimento.classList.remove('active');
+                                    }
+                                }, this);
+                                this.parentElement.classList.toggle('active');
+                            };
+
+                            var paragrafo = document.createElement('p');
+                            paragrafo.innerText = sanitizeHTML(conhecimentoObj.conteudo);
+
+                            conhecimentoElement.appendChild(header);
+                            conhecimentoElement.appendChild(paragrafo);
+
+                            listaConhecimentos.appendChild(conhecimentoElement);
+                        }
+                    } catch (e) {
+                        console.error('Erro ao carregar conhecimento:', e);
+                    }
+                }
+            }
+        }
+
+        carregarConhecimentos();
+    </script>
+</body>
+</html>

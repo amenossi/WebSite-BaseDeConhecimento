@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('canavial.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.txt2{
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+}
+
+#txt1 {
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.btncontainer {
+    display: flex;
+    gap: 20px; /* Espaço entre os botões */
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.Salvar1 {
+    background-color: green;
+    color: white;
+}
+
+.Cancelar1 {
+    background-color: red;
+    color: white;
+}
+
+.Salvar1:hover {
+    background-color: darkgreen;
+}
+
+.Cancelar1:hover {
+    background-color: darkred;
+}
